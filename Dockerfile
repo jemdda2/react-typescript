@@ -3,5 +3,5 @@ COPY ./front /front
 WORKDIR /front
 RUN npm install
 EXPOSE 3000
-ENV CI ture
+ENV CI true
 CMD npm start
