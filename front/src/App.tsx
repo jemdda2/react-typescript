@@ -1,32 +1,91 @@
-import React, { useState } from "react";
-import { Container, CssBaseline, Grid, makeStyles } from "@material-ui/core/";
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  CssBaseline,
+  Grid,
+  makeStyles,
+  List,
+  ListSubheader,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core/";
 import red from "@material-ui/core/colors/red";
+import { Send as SendIcon } from "@material-ui/icons";
 
 interface Props {}
 
+interface Bus {
+  name: string;
+  selected: boolean;
+}
+
+interface Hitchhiker {
+  name: string;
+}
+
 const useStyles = makeStyles((theme) => ({
-  red: {
-    backgroundColor: red[500],
+  list: {
+    backgroundColor: theme.palette.grey[500],
   },
 }));
 
 const App: React.FC<Props> = (props) => {
-  const [count, setCount] = useState<number>(0);
-
   const classes = useStyles();
+  const [chatBus, setChatBus] = useState<Bus[]>([]);
+  const [hitchhikers, setHitchhikers] = useState<Hitchhiker[]>([]);
+
+  useEffect(() => {
+    setChatBus([
+      { name: "aaa", selected: false },
+      { name: "bbb", selected: false },
+      { name: "ccc", selected: false },
+    ]);
+    setHitchhikers([{ name: "user1" }, { name: "user2" }, { name: "user2" }]);
+  }, [props]);
 
   return (
     <Container component="main" maxWidth="xl">
       <CssBaseline />
       <Grid container spacing={3}>
-        <Grid item xs={3} className={classes.red}>
-          bus
+        <Grid item xs={3} className={classes.list}>
+          <List
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                <SendIcon />
+                ChatBus
+              </ListSubheader>
+            }
+          >
+            {chatBus.map((bus) => (
+              <ListItem button>
+                <ListItemText primary={bus.name} />
+              </ListItem>
+            ))}
+          </List>
         </Grid>
         <Grid item xs={6}>
           main
         </Grid>
-        <Grid item xs={3}>
-          users
+        <Grid item xs={3} className={classes.list}>
+          <List
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                <SendIcon />
+                Users
+              </ListSubheader>
+            }
+          >
+            {hitchhikers.map((h) => (
+              <ListItem button>
+                <ListItemText primary={h.name} />
+              </ListItem>
+            ))}
+          </List>
         </Grid>
       </Grid>
     </Container>

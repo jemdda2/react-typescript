@@ -10,6 +10,34 @@ export default class ChatBus {
     this.ws.onmessage = this.onMessage;
   }
 
+  public busList() {
+    this.ws.send(
+      JSON.stringify({
+        type: "bus_list",
+        msg: "",
+      })
+    );
+  }
+
+  public hitchhickerList() {
+    this.ws.send(
+      JSON.stringify({
+        type: "hitchhicker_list",
+        msg: "",
+      })
+    );
+  }
+
+  private subscribers: {
+    [key: string]: Array<(data: any) => void>;
+  } = {};
+  public subscribe(eventName: string, callback: (data: any) => void): void {
+    if (!this.subscribers[eventName]) {
+      this.subscribers[eventName] = [];
+    }
+    this.subscribers[eventName].push(callback);
+  }
+
   private onError(this: WebSocket, event: Event): any {}
   private onOpen(this: WebSocket, ev: Event): any {
     // $.event.trigger({
@@ -35,6 +63,12 @@ export default class ChatBus {
     // };
   }
   private onMessage(this: WebSocket, ev: MessageEvent): any {
+    const data = JSON.parse(ev.data);
+    // this.subscribers[data.type].forEach((cb) => {
+    //   cb(data);
+    // });
+    // data を publishする。
+
     // var Data = JSON.parse(e.data);
     // console.log(Data);
     // $.event.trigger({
